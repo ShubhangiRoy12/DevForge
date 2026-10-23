@@ -1,0 +1,15 @@
+package com.devforge.task;
+
+import com.devforge.task.Task.Priority;
+import com.devforge.task.Task.Status;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+public record TaskRequest(
+		@NotNull Long projectId,
+		@NotBlank @Size(max = 160) String title,
+		@Size(max = 1000) String description,
+		@NotNull Status status,
+		@NotNull Priority priority) {
+}
