@@ -157,3 +157,11 @@ Outside the `demo` profile, DevForge supports email/password signup and login us
 For a hosted private instance, configure a persistent PostgreSQL database, set `APP_CORS_ALLOWED_ORIGIN` to the exact frontend origin, and set `DEVFORGE_SESSION_COOKIE_SECURE=true`. The cookie is HttpOnly and the API uses CSRF protection. Keep `DEVFORGE_SESSION_COOKIE_SAME_SITE=lax` when frontend and API are same-site. Only use `none` when they are hosted on different sites, and only over HTTPS. A public portfolio demo should continue using the separate `demo` profile and a separate database.
 
 Hosting accounts and provider-specific deployment settings still need to be configured by you; CI passing does not itself deploy the app.
+
+## Deploy a Single-Origin Render App
+
+The root `Dockerfile` builds the React frontend and packages it into the Spring Boot application. This serves the UI and `/api` from one origin, which keeps the session cookie first-party. `render.yaml` configures a free Render web service and prompts for the external PostgreSQL connection values; no database passwords belong in Git.
+
+Create a PostgreSQL database first, then create a Render Blueprint from this GitHub repository. For a Supabase database, use its session pooler connection details if needed and include `?sslmode=require` in `SPRING_DATASOURCE_URL`. Enter the JDBC URL, username, and password only in Render's secure Blueprint prompts. Set `APP_CORS_ALLOWED_ORIGIN` in the service environment to the exact Render app URL after it is created. The app uses a dedicated database; never connect a public deployment to a personal database.
+
+Render's free web services sleep when idle. Free Render Postgres expires after 30 days, so use a separate PostgreSQL provider or a paid Render database if you need the database to remain available past that period. Free Supabase databases can pause after a week of low activity; resume them from the Supabase dashboard if that happens.

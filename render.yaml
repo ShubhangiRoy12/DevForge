@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: devforge
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/status
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: postgres
+      - key: DEVFORGE_SESSION_COOKIE_SECURE
+        value: "true"
+      - key: DEVFORGE_SESSION_COOKIE_SAME_SITE
+        value: lax
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
