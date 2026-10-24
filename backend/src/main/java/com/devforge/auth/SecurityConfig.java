@@ -43,6 +43,12 @@ public class SecurityConfig {
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 			.userDetailsService(accounts)
 			.authorizeHttpRequests(auth -> {
+				auth.requestMatchers(HttpMethod.GET, "/", "/index.html", "/assets/**", "/favicon.ico",
+						"/favicon.svg", "/devforge-hero.png", "/icons.svg", "/robots.txt", "/site.webmanifest",
+						"/manifest.webmanifest").permitAll();
+				auth.requestMatchers(HttpMethod.HEAD, "/", "/index.html", "/assets/**", "/favicon.ico",
+						"/favicon.svg", "/devforge-hero.png", "/icons.svg", "/robots.txt", "/site.webmanifest",
+						"/manifest.webmanifest").permitAll();
 				auth.requestMatchers("/api/status", "/api/health", "/api/auth/csrf", "/api/auth/login", "/api/auth/signup",
 						"/api/snippets/shared/**").permitAll();
 				if (readOnlyDemo) auth.requestMatchers(HttpMethod.GET, "/api/**").permitAll();

@@ -23,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MvcResult;
 
 @SpringBootTest
@@ -46,6 +47,14 @@ class DevForgeApiIntegrationTests {
 		taskRepository.deleteAll();
 		projectRepository.deleteAll();
 		snippetRepository.deleteAll();
+	}
+
+	@Test
+	@WithAnonymousUser
+	void publicHomepageLoadsWhilePrivateProjectApiRemainsProtected() throws Exception {
+		mockMvc.perform(get("/")).andExpect(status().isOk());
+
+		mockMvc.perform(get("/api/projects")).andExpect(status().isForbidden());
 	}
 
 	@Test
